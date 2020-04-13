@@ -11,16 +11,23 @@ def h_function(ni,ki,n_back=1.0,k_back=0):
         (n_back + ni)**2 + (k_back + ki)**2
         )
     return ans
-def alpha_function(d, k, lambd):
-    ans = (2 * np.pi * k * d) / lambd
+def alpha_function(layer):
+    """Calc alpha function for layer material."""
+    ans = (2 * np.pi * layer.k * layer.thickness) / layer.lambd
     return ans
-def gamma_function(d, n, lambd):
-    ans = (2 * np.pi * n * d) / lambd
+def gamma_function(layer):
+    """Calc gamma function for layer material."""
+    ans = (2 * np.pi * layer.n * layer.thickness) / layer.lambd
     return ans
 def read_nk_file(file_name):
+    """Read file of 3 columns, (wave_lengthm, n, k) from 
+    ./Materials directory"""
+    route = './Materials/'
     if not file_name:
-        file_name = input('File Name:')
-    data = np.loadtxt(file_name,dtype=float)#, skiprows=1) 
+        route += input('File Name:')
+    else:
+        route += file_name
+    data = np.loadtxt(route,dtype=float)#, skiprows=1) 
     data = data.T
     if len(data) != 3:
         print('3 cols with Wavelength(nm) n k. Try again!')
@@ -56,6 +63,8 @@ def rsvw_function(Top,Up):
 
 
 class lego:
+    """Layer Object, input: the file name of file in 
+    Materials directory and name of layer"""
     def __init__(self, name, new=True, file_name=False):
         self.name = name
         if new:
@@ -66,8 +75,8 @@ class lego:
 
     def use(self, t, first=False, bottom=False, scnd=False):
         self.thickness = t
-        self.alpha = alpha_function(self.thickness, self.k, self.lambd)
-        self.gamma = gamma_function(self.thickness, self.n, self.lambd)
+        self.alpha = alpha_function(self)
+        self.gamma = gamma_function(self)
         if first:
             self.first = first
             self.bottom = bottom
