@@ -2,32 +2,26 @@ from utils import g_function, h_function, pqtu_function, rsvw_function
 
 
 class Bulk:
-    def __init__(self, *args, thickness_data=False):
-        self.only_two = False
-        self.n_layers = len(args) if len(args) >= 2 else "ERROR"
-        if self.n_layers == "ERROR":
-            raise "The cell must 2 layers or more"
-        self.layers = []
-        first = True
-        for i in range(len(args)):
-            layer = args[i]
-            if not thickness_data:
-                thickness = float(input("Thickness of {}:".format(layer.name)))
-            else:
-                if len(args) != len(thickness_data):
-                    raise (
-                        "Thickness_data list do not have the" + f" {len(args)} values."
-                    )
-                else:
-                    thickness = thickness_data[i]
-            if first:
-                layer.use(thickness, first=first)
-                first = False
-            else:
-                layer.use(thickness, bottom=layer == args[-1])
-            self.layers.append(layer)
+    def __init__(self, *layers):
+        if len(layers) < 1:
+            # TODO: Create own exceptions
+            raise Exception("The number of layers must be greater than or equal to 2.")
+
         self.p, self.q, self.t, self.u = False, False, False, False
         self.R, T = False, False
+
+        self.layers = layers
+        self.num_layers = len(self.layers)
+
+        # update layers
+        for i, layer in enumerate(self.layers):
+            if i == 0:
+                layer.first = True
+            elif i == (self.num_layers - 1):
+                layer.bottom = True
+            layer.update_gh_values()
+
+        self.prepare_legos()
 
     def prepare_legos(self):
         for layer in self.layers:
@@ -46,7 +40,6 @@ class Bulk:
         return False
 
     def calc_R(self):
-        self.prepare_legos()
         for layer in self.layers:
             if layer.first:
                 up = layer

@@ -21,24 +21,6 @@ def h_function(ni, ki, n_back=1.0, k_back=0):
     return ans
 
 
-def alpha_function(layer):
-    """Function defined to summary some calculations. For more information,
-    please consult http://bdigital.unal.edu.co/65682/1/1053830848.2018.pdf,
-    pag. 26.
-    """
-    ans = (2 * numpy.pi * layer.k * layer.thickness) / layer.lambd
-    return ans
-
-
-def gamma_function(layer):
-    """Function defined to summary some calculations. For more information,
-    please consult http://bdigital.unal.edu.co/65682/1/1053830848.2018.pdf,
-    pag. 26.
-    """
-    ans = (2 * numpy.pi * layer.n * layer.thickness) / layer.lambd
-    return ans
-
-
 def pqtu_function(up, layer):
     """Function defined to summary some calculations. For more information,
     please consult http://bdigital.unal.edu.co/65682/1/1053830848.2018.pdf,
