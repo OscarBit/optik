@@ -1,5 +1,4 @@
 import numpy
-from utils import g_function, h_function
 
 
 class Layer:
@@ -36,11 +35,6 @@ class Layer:
         pag. 26.
         """
         return (2 * numpy.pi * self.n * self.thickness) / self.lambd
-
-    def update_gh_values(self):
-        if self.first:
-            self.g = g_function(self.n, self.k)
-            self.h = h_function(self.n, self.k)
 
     @staticmethod
     def read_nk_file(filename, sep=None, has_header=False):

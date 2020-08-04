@@ -13,31 +13,26 @@ class Bulk:
         self.layers = layers
         self.num_layers = len(self.layers)
 
-        # update layers
+        self.update_gh_layers()
+
+    def update_gh_layers(self):
+        self.layers[0].first = True
+        self.layers[-1].bottom = True
+
         for i, layer in enumerate(self.layers):
             if i == 0:
-                layer.first = True
-            elif i == (self.num_layers - 1):
-                layer.bottom = True
-            layer.update_gh_values()
-
-        self.prepare_legos()
-
-    def prepare_legos(self):
-        for layer in self.layers:
-            if layer.first:
-                up = layer
-                continue
-            layer.g = g_function(layer.n, layer.k, n_back=up.n, k_back=up.k)
-            if up.first:
-                layer.h = (2 * (up.n ** (layer.k) - layer.n ** (up.k))) / (
-                    ((up.n + layer.n) ** 2) + ((up.k + layer.k) ** 2)
-                )
-                layer.scnd = True
+                layer.g = g_function(layer.n, layer.k)
+                layer.h = h_function(layer.n, layer.k)
             else:
-                layer.h = h_function(layer.n, layer.k, n_back=up.n, k_back=up.k)
-            up = layer
-        return False
+                up = self.layers[i - 1]
+                layer.g = g_function(layer.n, layer.k, n_back=up.n, k_back=up.k)
+                if up.first:
+                    layer.h = (2 * (up.n ** (layer.k) - layer.n ** (up.k))) / (
+                        ((up.n + layer.n) ** 2) + ((up.k + layer.k) ** 2)
+                    )
+                    layer.scnd = True
+                else:
+                    layer.h = h_function(layer.n, layer.k, n_back=up.n, k_back=up.k)
 
     def calc_R(self):
         for layer in self.layers:
