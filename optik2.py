@@ -216,7 +216,7 @@ class lego_tower():
                 )
                 self.T = (layer.n / no) * ((l ** 2) + (m ** 2)) / (
                     (self.p ** 2) + (self.q ** 2)) * 100
-                self.Abs = 100 - (R + T)
+                self.Abs = 100 - (self.R + self.T)
             else:
                 top, up, layer = self.layers[0:3]
                 l = (
@@ -233,8 +233,8 @@ class lego_tower():
                 )
                 self.T = (layer.n / no) * ((l ** 2) + (m ** 2)) / (
                     (self.p_T ** 2) + (self.q_T ** 2)) * 100
-                self.Abs = 100 - (R + T)
+                self.Abs = 100 - (self.R + self.T)
             return self.R, self.T
         else:
-            self.Abs = 100 - (R + T)
+            self.Abs = 100 - (self.R + self.T)
             return self.R, self.T
