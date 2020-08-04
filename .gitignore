@@ -149,4 +149,4 @@ Pipfile.lock
 *.json
 *.txt
 *.dat
-!requirements.txt
+!requirements_dev.txt
