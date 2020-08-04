@@ -1,5 +1,5 @@
-import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib import pyplot
+
 from bulk import Bulk
 from layer import Layer
 
@@ -14,23 +14,23 @@ def main():
 
     cell2.RT()
 
-    plt.figure(figsize=(8, 6), dpi=300, facecolor="w", edgecolor="k")
-    plt.plot(capa_GaAs.lambd, cell2.R, linewidth=0.5)
-    plt.xlabel("Wave length (nm)", {"fontsize": 15})
-    plt.ylabel("Reflectance (%)", {"fontsize": 15})
-    plt.title("Reflectance", {"fontsize": 15})
-    plt.grid(True)
-    plt.savefig("reflectane.pdf")
-    plt.close()
+    pyplot.figure(figsize=(8, 6), dpi=300, facecolor="w", edgecolor="k")
+    pyplot.plot(capa_GaAs.lambd, cell2.R, linewidth=0.5)
+    pyplot.xlabel("Wave length (nm)", {"fontsize": 15})
+    pyplot.ylabel("Reflectance (%)", {"fontsize": 15})
+    pyplot.title("Reflectance", {"fontsize": 15})
+    pyplot.grid(True)
+    pyplot.savefig("reflectane.pdf")
+    pyplot.close()
 
-    plt.figure(figsize=(8, 6), dpi=300, facecolor="w", edgecolor="k")
-    plt.plot(capa_GaAs.lambd, cell2.T, linewidth=0.5)
-    plt.xlabel("Wave length (nm)", {"fontsize": 15})
-    plt.ylabel("Transmitance (%)", {"fontsize": 15})
-    plt.title("Transmitance", {"fontsize": 15})
-    plt.grid(True)
-    plt.savefig("transmitance.pdf")
-    plt.close()
+    pyplot.figure(figsize=(8, 6), dpi=300, facecolor="w", edgecolor="k")
+    pyplot.plot(capa_GaAs.lambd, cell2.T, linewidth=0.5)
+    pyplot.xlabel("Wave length (nm)", {"fontsize": 15})
+    pyplot.ylabel("Transmitance (%)", {"fontsize": 15})
+    pyplot.title("Transmitance", {"fontsize": 15})
+    pyplot.grid(True)
+    pyplot.savefig("transmitance.pdf")
+    pyplot.close()
 
 
 if __name__ == "__main__":

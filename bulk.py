@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-import numpy as np
 from utils import g_function, h_function, pqtu_function, rsvw_function
 
 
