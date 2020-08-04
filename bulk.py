@@ -1,98 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-
-def g_function(ni,ki,n_back=1.0,k_back=0):
-    ans  = (n_back**2 - ni**2 + k_back**2 - ki**2) / (
-        (n_back + ni)**2 + (k_back + ki)**2
-        )
-    return ans
-def h_function(ni,ki,n_back=1.0,k_back=0):
-    ans  = 2*(n_back*ki - ni*k_back) / (
-        (n_back + ni)**2 + (k_back + ki)**2
-        )
-    return ans
-def alpha_function(layer):
-    """Calc alpha function for layer material."""
-    ans = (2 * np.pi * layer.k * layer.thickness) / layer.lambd
-    return ans
-def gamma_function(layer):
-    """Calc gamma function for layer material."""
-    ans = (2 * np.pi * layer.n * layer.thickness) / layer.lambd
-    return ans
-def read_nk_file(file_name):
-    """Read file of 3 columns, (wave_lengthm, n, k) from 
-    ./Materials directory"""
-    route = './Materials/'
-    if not file_name:
-        route += input('File Name:')
-    else:
-        route += file_name
-    data = np.loadtxt(route,dtype=float)#, skiprows=1) 
-    data = data.T
-    if len(data) != 3:
-        print('3 cols with Wavelength(nm) n k. Try again!')
-        raise ValueError("Can't upload data")
-    else:
-        wl, n, k = data
-        step = 0.5
-        new_wl = np.arange(280.0,wl.max()+0.5,step,dtype=float)
-        new_n = np.interp(new_wl,wl,n)
-        new_k = np.interp(new_wl,wl,k)
-        new_data = np.array([
-                list(new_wl),
-                list(new_n),
-                list(new_k)
-            ],dtype=float)
-        return new_data
-def pqtu_function(Up,Layer):
-    P = np.exp(Up.alpha) * np.cos(Up.gamma)
-    Q = np.exp(Up.alpha) * np.sin(Up.gamma)
-    T = np.exp(-Up.alpha) * (Layer.g * (np.cos(Up.gamma)) +
-    Layer.h * (np.sin(Up.gamma)))
-    U = np.exp(-Up.alpha) * (Layer.h * (np.cos(Up.gamma)) -
-    (Layer.g) * (np.sin(Up.gamma)))
-    return P,Q,T,U
-def rsvw_function(Top,Up):
-    R = np.exp(Top.alpha) * (Up.g * (np.cos(Top.gamma)) 
-    - Up.h * (np.sin(Top.gamma)))
-    S = np.exp(Top.alpha) * (Up.h * (np.cos(Top.gamma)) 
-    + Up.g * (np.sin(Top.gamma)))
-    V = np.exp(-Top.alpha) * np.cos(Top.gamma)
-    W = -np.exp(-Top.alpha) * np.sin(Top.gamma)
-    return R,S,V,W
+from utils import g_function, h_function, pqtu_function, rsvw_function
 
 
-class lego:
-    """Layer Object, input: the file name of file in 
-    Materials directory and name of layer"""
-    def __init__(self, name, new=True, file_name=False):
-        self.name = name
-        if new:
-            data = read_nk_file(file_name)
-            self.lambd, self.n, self.k  = data[0], data[1], data[2]
-        else:
-            raise "Buscar name en la base, no sé cómo :v"
-
-    def use(self, t, first=False, bottom=False, scnd=False):
-        self.thickness = t
-        self.alpha = alpha_function(self)
-        self.gamma = gamma_function(self)
-        if first:
-            self.first = first
-            self.bottom = bottom
-            self.scnd = scnd
-            self.g = g_function(self.n, self.k)
-            self.h = h_function(self.n, self.k)
-        else:
-            self.first = first
-            self.bottom = bottom
-            self.scnd = scnd
-            self.g = None
-            self.h = None
-        return self
-
-
-class lego_tower():
+class Bulk:
     def __init__(self, *args, thickness_data=False):
         self.only_two = False
         self.n_layers = len(args) if len(args) >= 2 else "ERROR"
@@ -103,29 +14,27 @@ class lego_tower():
         for i in range(len(args)):
             layer = args[i]
             if not thickness_data:
-                thickness = float(input(
-                    'Thickness of {}:'.format(layer.name)
-                    ))
+                thickness = float(input("Thickness of {}:".format(layer.name)))
             else:
                 if len(args) != len(thickness_data):
                     raise (
-                "Thickness_data list do not have the" +
-                f" {len(args)} values.")
+                        "Thickness_data list do not have the" + f" {len(args)} values."
+                    )
                 else:
                     thickness = thickness_data[i]
             if first:
                 layer.use(thickness, first=first)
                 first = False
             else:
-                layer.use(thickness, bottom=layer==args[-1])
+                layer.use(thickness, bottom=layer == args[-1])
             self.layers.append(layer)
         self.p, self.q, self.t, self.u = False, False, False, False
-        self.R,T = False, False
+        self.R, T = False, False
 
     def prepare_legos(self):
         for layer in self.layers:
             if layer.first:
-                up = layer 
+                up = layer
                 continue
             layer.g = g_function(layer.n, layer.k, n_back=up.n, k_back=up.k)
             if up.first:
@@ -134,9 +43,7 @@ class lego_tower():
                 )
                 layer.scnd = True
             else:
-                layer.h = h_function(layer.n, layer.k,
-                 n_back=up.n, k_back=up.k
-                 )
+                layer.h = h_function(layer.n, layer.k, n_back=up.n, k_back=up.k)
             up = layer
         return False
 
@@ -147,7 +54,7 @@ class lego_tower():
                 up = layer
                 continue
             elif layer.scnd:
-                p,q,t,u = pqtu_function(up,layer)
+                p, q, t, u = pqtu_function(up, layer)
                 p1n = p + (up.g * t) - up.h * u
                 q1n = q + (up.h * t) + up.g * u
                 t1n = t + (up.g * p) - up.h * q
@@ -155,10 +62,10 @@ class lego_tower():
                 top = up
                 self.only_two = layer.scnd and layer.bottom
             elif up.scnd:
-                #third matrix
+                # third matrix
                 p1n_up, q1n_up, t1n_up, u1n_up = p1n, q1n, t1n, u1n
-                p,q,t,u = pqtu_function(up,layer)
-                r,s,v,w = rsvw_function(top,up)
+                p, q, t, u = pqtu_function(up, layer)
+                r, s, v, w = rsvw_function(top, up)
 
                 r_1up = r + top.g * v - top.h * w
                 s_1up = s + top.h * v + top.g * w
@@ -175,12 +82,12 @@ class lego_tower():
                     self.q_T = q1n
                 top = up
             else:
-                #matrices in the middle
+                # matrices in the middle
                 p1n_top, q1n_top, t1n_top, u1n_top = p1n_up, q1n_up, t1n_up, u1n_up
                 p1n_up, q1n_up, t1n_up, u1n_up = p1n, q1n, t1n, u1n
                 r_1top, s_1top, v_1top, w_1top = r_1up, s_1up, v_1up, w_1up
-                p,q,t,u = pqtu_function(up,layer)
-                r,s,v,w = rsvw_function(top,up)
+                p, q, t, u = pqtu_function(up, layer)
+                r, s, v, w = rsvw_function(top, up)
 
                 r_1up = p1n_top * r - q1n_top * s + r_1top * v - s_1top * w
                 s_1up = q1n_top * r + p1n_top * s + s_1top * v + r_1top * w
@@ -194,8 +101,7 @@ class lego_tower():
                 top = up
             up = layer
         self.p, self.q, self.t, self.u = p1n, q1n, t1n, u1n
-        R = ((self.t ** 2) + (self.u ** 2)) / (
-            (self.p ** 2) + (self.q ** 2)) * 100
+        R = ((self.t ** 2) + (self.u ** 2)) / ((self.p ** 2) + (self.q ** 2)) * 100
         return R
 
     def RT(self, new=True):
@@ -209,13 +115,13 @@ class lego_tower():
                     - layer.h * (1 + up.g)
                     - up.h * (1 + layer.g)
                 )
-                m = (
-                    up.h * (1 + layer.g)
-                    + layer.h * (1 + up.g)
-                    - up.h * layer.h
+                m = up.h * (1 + layer.g) + layer.h * (1 + up.g) - up.h * layer.h
+                self.T = (
+                    (layer.n / no)
+                    * ((l ** 2) + (m ** 2))
+                    / ((self.p ** 2) + (self.q ** 2))
+                    * 100
                 )
-                self.T = (layer.n / no) * ((l ** 2) + (m ** 2)) / (
-                    (self.p ** 2) + (self.q ** 2)) * 100
                 self.Abs = 100 - (self.R + self.T)
             else:
                 top, up, layer = self.layers[0:3]
@@ -231,8 +137,12 @@ class lego_tower():
                     + layer.h * (1 + top.g) * (1 + up.g)
                     - top.h * up.h * layer.h
                 )
-                self.T = (layer.n / no) * ((l ** 2) + (m ** 2)) / (
-                    (self.p_T ** 2) + (self.q_T ** 2)) * 100
+                self.T = (
+                    (layer.n / no)
+                    * ((l ** 2) + (m ** 2))
+                    / ((self.p_T ** 2) + (self.q_T ** 2))
+                    * 100
+                )
                 self.Abs = 100 - (self.R + self.T)
             return self.R, self.T
         else:

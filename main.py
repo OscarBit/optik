@@ -1,15 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import optik2 as optik
+from bulk import Bulk
+from layer import Layer
 
 
 def main():
-    capa_MgF = optik.lego("MgF2")
-    capa_ZnS = optik.lego("ZnS")
-    capa_InGaP = optik.lego("InGaP")
-    capa_GaAs = optik.lego("GaAs")
+    capa_MgF = Layer("MgF2")
+    capa_ZnS = Layer("ZnS")
+    capa_InGaP = Layer("InGaP")
+    capa_GaAs = Layer("GaAs")
 
-    cell2 = optik.lego_tower(capa_MgF, capa_ZnS, capa_InGaP, capa_GaAs)
+    cell2 = Bulk(capa_MgF, capa_ZnS, capa_InGaP, capa_GaAs)
 
     cell2.RT()
 
