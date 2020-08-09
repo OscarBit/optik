@@ -150,3 +150,6 @@ Pipfile.lock
 *.txt
 *.dat
 !requirements_dev.txt
+
+!v1.txt
+!v2.txt
