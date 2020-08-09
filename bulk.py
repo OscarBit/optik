@@ -8,7 +8,7 @@ class Bulk:
             raise Exception("The number of layers must be greater than or equal to 2.")
 
         self.p, self.q, self.t, self.u = False, False, False, False
-        self.R, T = False, False
+        self.R, self.T = False, False
 
         self.layers = layers
         self.num_layers = len(self.layers)
@@ -87,15 +87,14 @@ class Bulk:
                 top = up
             up = layer
         self.p, self.q, self.t, self.u = p1n, q1n, t1n, u1n
-        R = ((self.t ** 2) + (self.u ** 2)) / ((self.p ** 2) + (self.q ** 2)) * 100
-        return R
+        return ((self.t ** 2) + (self.u ** 2)) / ((self.p ** 2) + (self.q ** 2)) * 100
 
     def RT(self, new=True):
-        no = 1
         if new:
             self.R = self.calc_R()
+            no = 1
             if self.only_two:
-                up, layer = self.layers[0:2]
+                up, layer = self.layers[:2]
                 l = (
                     (1 + up.g) * (1 + layer.g)
                     - layer.h * (1 + up.g)
@@ -108,9 +107,8 @@ class Bulk:
                     / ((self.p ** 2) + (self.q ** 2))
                     * 100
                 )
-                self.Abs = 100 - (self.R + self.T)
             else:
-                top, up, layer = self.layers[0:3]
+                top, up, layer = self.layers[:3]
                 l = (
                     (1 + top.g) * (1 + up.g) * (1 + layer.g)
                     - up.h * layer.h * (1 + top.g)
@@ -129,8 +127,5 @@ class Bulk:
                     / ((self.p_T ** 2) + (self.q_T ** 2))
                     * 100
                 )
-                self.Abs = 100 - (self.R + self.T)
-            return self.R, self.T
-        else:
-            self.Abs = 100 - (self.R + self.T)
-            return self.R, self.T
+        self.Abs = 100 - (self.R + self.T)
+        return self.R, self.T

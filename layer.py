@@ -50,7 +50,6 @@ class Layer:
         new_wavelength = numpy.arange(280.0, wavelength.max() + 0.5, step, dtype=float)
         new_n = numpy.interp(new_wavelength, wavelength, n)
         new_k = numpy.interp(new_wavelength, wavelength, k)
-        new_data = numpy.array(
+        return numpy.array(
             [list(new_wavelength), list(new_n), list(new_k)], dtype=float
         )
-        return new_data
