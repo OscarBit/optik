@@ -24,7 +24,7 @@ def main():
     ]
     cell = Bulk(*layers)
     v1, v2 = cell.RT()
-    print(f"Bulk of layers {layer.name for layer in layers}: \nR: {v1}\nT: {v2}")
+    print(f"Bulk of layers {[layer.name for layer in layers]}: \nR: {v1}\nT: {v2}")
 
 
 if __name__ == "__main__":
