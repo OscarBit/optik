@@ -22,8 +22,8 @@ def main():
         Layer(name="InGaP", thickness=300.0, filename="./Materials/Al2.txt"),
         Layer(name="GaAs", thickness=400.0, filename="./Materials/Si.txt"),
     ]
-    cell2 = Bulk(*layers)
-    v1, v2 = cell2.RT()
+    cell = Bulk(*layers)
+    v1, v2 = cell.RT()
     print(f"Bulk of layers {layer.name for layer in layers}: \nR: {v1}\nT: {v2}")
 
 
