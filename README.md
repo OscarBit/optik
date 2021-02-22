@@ -6,7 +6,7 @@ Calculate Reflectance and Transmitance of cell using Python OOP.
 
 ## Simulación del modelo óptico en Python 3+
 
-Se utilizó la librería numpy, mediante una estructura de programación orientada a objetos (POO), definiendo las clases bulk y layer, que tienen atributos propios de sus características físicas y métodos necesarios para el cálculo de sus parámetros ópticos. La clase layer se declara con tres parámetros, nombre, grosor de la película y la ubicación del archivo que contiene la data de los parámetros óticos n y k, para este material. La clase bulk recibe las capas (layer) y simula un material multicapa. Después de declarar las capas y componer el material multicapa se ejecuta el método para calcular R y T.
+Se utilizó programación orientada a objetos (POO) y la librería numpy, definiendo las clases bulk y layer, que tienen atributos propios de sus características físicas y métodos necesarios para el cálculo de sus parámetros ópticos. La clase layer se declara con tres parámetros, nombre, grosor de la película y la ubicación del archivo que contiene la data de los parámetros óticos n y k, para este material. La clase bulk recibe las capas (layer) y simula un material multicapa. Después de declarar las capas y componer el material multicapa se ejecuta el método para calcular R y T.
 La estructura del código contiene una carpeta "Materials", en la que se almacena la información de cada material.
 ```console
 ├── LICENSE
@@ -32,9 +32,9 @@ La estructura del código contiene una carpeta "Materials", en la que se almacen
     │   └── v2.txt
     └── utils.py
 ```
-Este código esta disponible en este repositorio como proyecto público con el fin recibir contribuciones externas y tener una mejora continua con apoyo de otros desarrolladores y/o cientificos interesados en la simulación del modelo óptico de celdas solares.
+Para solucionar el sistema de ecuaciones se usan las funciones de `./src/utils.py` embebidas en los métodos de la clase bulk. Este código esta disponible en este repositorio como proyecto público con el fin recibir contribuciones externas y tener una mejora continua con apoyo de otros desarrolladores y/o cientificos interesados en la simulación del modelo óptico de celdas solares.
 
-Hay diferentes formas de utilizar este código, se recomienda crear un entorno virtual e instalar los requerimientos con el comando `pip install -r requirements_dev.txt`.
+Hay diferentes formas de utilizar este código, se recomienda crear un entorno virtual `$ pip install virtualenv && python3 -m venv optik`, descargar el código e instalar los requerimientos con el comando `pip install -r requirements_dev.txt`.
 
 ```python
 from src.bulk import Bulk
