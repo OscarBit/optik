@@ -32,7 +32,7 @@ La estructura del código contiene una carpeta "Materials", en la que se almacen
     │   └── v2.txt
     └── utils.py
 ```
-Para solucionar el sistema de ecuaciones se usan las funciones de `./src/utils.py` embebidas en los métodos de la clase bulk. Este código esta disponible en este repositorio como proyecto público con el fin recibir contribuciones externas y tener una mejora continua con apoyo de otros desarrolladores y/o cientificos interesados en la simulación del modelo óptico de celdas solares.
+Para solucionar el sistema de ecuaciones se usan las funciones de `./src/utils.py` embebidas en los métodos de la clase bulk. Este código esta disponible en este repositorio público como proyecto open source.
 
 Hay diferentes formas de utilizar este código, se recomienda crear un entorno virtual `$ pip install virtualenv && python3 -m venv optik`, descargar el código e instalar los requerimientos con el comando `pip install -r requirements_dev.txt`.
 
