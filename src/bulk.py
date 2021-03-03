@@ -87,7 +87,8 @@ class Bulk:
                 top = up
             up = layer
         self.p, self.q, self.t, self.u = p1n, q1n, t1n, u1n
-        return ((self.t ** 2) + (self.u ** 2)) / ((self.p ** 2) + (self.q ** 2)) * 100
+        self.R = ((self.t ** 2) + (self.u ** 2)) / ((self.p ** 2) + (self.q ** 2)) * 100
+        return self.R
 
     def RT(self, new=True):
         if new:
