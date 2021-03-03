@@ -36,6 +36,8 @@ Para solucionar el sistema de ecuaciones se usan las funciones de `./src/utils.p
 
 Hay diferentes formas de utilizar este código, se recomienda crear un entorno virtual `$ pip install virtualenv && python3 -m venv optik`, descargar el código e instalar los requerimientos con el comando `pip install -r requirements_dev.txt`.
 
+En el objeto bulk simula la celda, a este objeto se le definieron 4 métodos. Inicializador o *\_\_init\_\_*, que se ejecuta automáticamente al declarar una nueva celda, *update_gh_layers* que carga la información de las capas que la conforman y solo es ejecutado al final del método *\_\_init\_\_*, *calc_R* calcula la Reflectancia del material en bulk y lo devuelve, por último *RT* este método devuelve los datos de Reflectancia y Transmitancia de la celda haciendo uso de *calc_R*. El método más útil para obtener resultados inmediatos es *RT*, los demás fueron definidos en esta clase para facilitar la simulación.
+
 ```python
 from src.bulk import Bulk
 from src.layer import Layer
