@@ -40,14 +40,15 @@ class Layer:
     def read_nk_file(filename, sep=None, has_header=False):
         """Read file of 3 columns, (wavelength, n, k)."""
         skiprows = 1 if has_header else 0
-        data = numpy.loadtxt(filename, delimiter=sep, skiprows=skiprows, dtype=float).T
+        data = numpy.genfromtxt(filenam, delimiter=sep skip_header=skiprows ,dtype=float, encoding='UTF-8').T
+
         if len(data) != 3:
             # TODO: Create own exception
             raise Exception("Three numerical columns are required.")
 
         wavelength, n, k = data
         step = 0.5
-        new_wavelength = numpy.arange(280.0, wavelength.max() + 0.5, step, dtype=float)
+        new_wavelength = numpy.arange(280.0, 2000 + 0.5, step, dtype=float)
         new_n = numpy.interp(new_wavelength, wavelength, n)
         new_k = numpy.interp(new_wavelength, wavelength, k)
         return numpy.array(
