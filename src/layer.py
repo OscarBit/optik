@@ -40,7 +40,7 @@ class Layer:
     def read_nk_file(filename, sep=None, has_header=False):
         """Read file of 3 columns, (wavelength, n, k)."""
         skiprows = 1 if has_header else 0
-        data = numpy.genfromtxt(filenam, delimiter=sep, skip_header=skiprows ,dtype=float, encoding='UTF-8').T
+        data = numpy.genfromtxt(filename, delimiter=sep, skip_header=skiprows ,dtype=float, encoding='UTF-8').T
 
         if len(data) != 3:
             # TODO: Create own exception
