@@ -1,4 +1,4 @@
-from .utils import g_function, h_function, pqtu_function, rsvw_function
+from .utils import g_function, h_function, pqtu_function, rsvw_function 
 
 
 class Bulk:
@@ -27,8 +27,8 @@ class Bulk:
                 up = self.layers[i - 1]
                 layer.g = g_function(layer.n, layer.k, n_back=up.n, k_back=up.k)
                 if up.first:
-                    layer.h = (2 * (up.n ** (layer.k) - layer.n ** (up.k))) / (
-                        ((up.n + layer.n) ** 2) + ((up.k + layer.k) ** 2)
+                    layer.h = (2 * (up.n * (layer.k))) / (
+                        ((up.n + layer.n) ** 2) + ((layer.k) ** 2)
                     )
                     layer.scnd = True
                 else:
