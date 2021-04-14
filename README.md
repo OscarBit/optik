@@ -60,3 +60,5 @@ if __name__ == "__main__":
     main()
 ```
 ![demo](demo.gif)
+
+Si falla al renderizar el notebook en colab: https://colab.research.google.com/github/OscarBit/optik/blob/master/Optik.ipynb
